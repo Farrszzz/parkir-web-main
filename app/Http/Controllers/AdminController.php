@@ -7,85 +7,38 @@ use Illuminate\support\Facades\DB;
 
 class AdminController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        
+    public function index(){
+        $data_user = \App\Models\pegawai::all();
+        return view('viewUser.index', ['data_user' => $data_user]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create(Request $request)
-    {
+    public function create(Request $request){
         $user = DB::table('user')->get();
         $password = bcrypt($request->password);
         DB::table('user')->insert(['username'=>$request->username,
         'password'=>$password,
         'role'=>$request->role,
         'mall'=>$request->mall]);
-        return redirect('/');
+        return redirect('/pegawai');
+        
+        \App\Models\pegawai::create($request->all());
+        return redirect('/pegawai')->with('sukses','Data berhasil diinput');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+    public function edit($id_user){
+        $user = \App\Models\pegawai::find($id_user);
+        return view('editUser.index', ['user' => $user]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+    public function update(Request $request,$id_user){
+        $user = \App\Models\pegawai::find($id_user);
+        $user->update($request->all());
+        return redirect('/pegawai')->with('sukses','Data berhasil diupdate');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+    public function delete($id_user){
+        $user = \App\Models\pegawai::find($id_user);
+        $user->delete($user);
+        return redirect('/pegawai')->with('sukses','Data berhasil dihapus');
     }
 }

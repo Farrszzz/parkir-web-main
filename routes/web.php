@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,12 +14,27 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/create', function () {
-    return view('index');
+Route::get('/', function () {
+    return view('welcome');
 });
 
-Route::get('user/add_user', 'App\Http\Controllers\AdminController@create')->name('add_user');
-Route::get('/login', '\App\Http\Controllers\ParkirController@create');
-Route::get('/test', function () {
-    return view('test');
+ 
+ //
+ Route::get('/home', function(){
+     return view('Home');
+ });
+
+ Route::get('/about', function(){
+     return view('about');
+ });
+
+
+Route::get('/dashboard', function() {
+    return view('dashboard.index');
 });
+ 
+Route::get('/pegawai', '\App\Http\Controllers\AdminController@index'); // Menampilkan data yang ada di database
+Route::post('/pegawai/create', '\App\Http\Controllers\AdminController@create'); // Membuat data baru
+Route::get('/pegawai/{id_user}/edit', '\App\Http\Controllers\AdminController@edit'); // Mengedit data yang sudah ada
+Route::post('/pegawai/{id_user}/update', '\App\Http\Controllers\AdminController@update'); // Mengupdate data yang sudah diedit
+Route::get('/pegawai/{id_user}/delete', '\App\Http\Controllers\AdminController@delete'); // Menghapus data
